@@ -159,7 +159,7 @@
         
         .quiz-top-button {
             position: absolute;
-            bottom: 340px;
+            bottom: 460px;
             left: 50%;
             transform: translateX(-50%);
             width: 480px;
@@ -182,7 +182,7 @@
         
         .main-top-button {
             position: absolute;
-            bottom: 220px;
+            bottom: 340px;
             left: 50%;
             transform: translateX(-50%);
             width: 480px;
@@ -248,7 +248,7 @@
         
         .explanation-button {
             position: absolute;
-            bottom: 480px;
+            bottom: 600px;
             left: 50%;
             transform: translateX(-50%);
             width: 480px;
@@ -318,6 +318,17 @@
         
         .hidden {
             display: none !important;
+        }
+        
+        /* 結果画面とクイズ画面のボタン位置を共通化 */
+        .result-screen .quiz-top-button,
+        .quiz-screen .quiz-top-button {
+            bottom: 460px;
+        }
+        
+        .result-screen .main-top-button,
+        .quiz-screen .main-top-button {
+            bottom: 340px;
         }
     </style>
 </head>
