@@ -159,7 +159,7 @@
         
         .quiz-top-button {
             position: absolute;
-            bottom: 240px;
+            bottom: 340px;
             left: 50%;
             transform: translateX(-50%);
             width: 480px;
@@ -182,7 +182,7 @@
         
         .main-top-button {
             position: absolute;
-            bottom: 120px;
+            bottom: 220px;
             left: 50%;
             transform: translateX(-50%);
             width: 480px;
@@ -213,8 +213,8 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding-bottom: 300px;
+            justify-content: flex-start;
+            padding-top: 250px;
         }
         
         .result-card {
@@ -248,7 +248,7 @@
         
         .explanation-button {
             position: absolute;
-            bottom: 460px;
+            bottom: 480px;
             left: 50%;
             transform: translateX(-50%);
             width: 480px;
@@ -422,13 +422,13 @@
         let answerStats = null;
         
         // Google Apps Script Web App URL
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyCDT3jFuxLWfwgMyV5mJgXfzZjm2P3KMkoxw0Onyd4zvf8mCL-e-mSCWsDdb-w0pWB/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzf4qREjAhy66ADqSKHGHgw9VCy67EjqwyG7yBptU1NyI_6PZicjvCL3-CUnOYf4paG8A/exec';
         
         // 統計データの初期化
         function createEmptyStats() {
             const stats = {};
             Object.keys(quizData).forEach(key => {
-                stats[key] = { A: 0, B: 0, C: 0};
+                stats[key] = { A: 0, B: 0, C: 0, D: 0 };
             });
             return stats;
         }
@@ -513,17 +513,11 @@
             if (isCorrect) {
                 resultHeader.textContent = 'お見事！';
                 resultMain.textContent = '正解！';
-                resultFooter.textContent = 'もっと名護を知りたい方は\nこちら';
+                resultFooter.textContent = '正答率は明日公開！';
             } else {
-                // 正答率を計算
-                const stats = answerStats[currentQuiz.id];
-                const correctCount = stats[currentQuiz.correct] || 0;
-                const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
-                const correctRate = total > 0 ? Math.round((correctCount / total) * 100) : 0;
-                
                 resultHeader.textContent = '残念...';
                 resultMain.textContent = '不正解！';
-                resultFooter.textContent = `正答率は${correctRate}%！`;
+                resultFooter.textContent = '正答率は明日公開！';
             }
             
             showScreen('resultScreen');
