@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名護クイズマスター検定</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 782px;
+            height: 1390px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', 'Yu Gothic', 'Meiryo', sans-serif;
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #7accbf;
+        }
+        
+        /* メイン画面選択画面 */
+        .level-select-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .main-title {
+            margin-top: 80px;
+            text-align: center;
+            color: #fcf2e5;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .main-title h1 {
+            font-size: 56px;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1.3;
+        }
+        
+        .level-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px 60px;
+            margin-top: 80px;
+            padding: 0 100px;
+        }
+        
+        .level-button {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: #fcf2e5;
+            border: none;
+            font-size: 48px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .level-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+        }
+        
+        .top-button {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 100px;
+            background: #d0d0d0;
+            border: none;
+            border-radius: 25px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .top-button:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        /* クイズ画面 */
+        .quiz-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .question {
+            margin-top: 120px;
+            width: 650px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: #fcf2e5;
+            line-height: 1.5;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .choices {
+            margin-top: 100px;
+            width: 600px;
+        }
+        
+        .choice {
+            display: block;
+            width: 100%;
+            margin: 30px 0;
+            padding: 35px 45px;
+            background: #fcf2e5;
+            border: none;
+            border-radius: 35px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .choice:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 18px rgba(0,0,0,0.3);
+        }
+        
+        .choice:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .quiz-top-button {
+            position: absolute;
+            bottom: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            height: 90px;
+            background: #d0d0d0;
+            border: none;
+            border-radius: 25px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .quiz-top-button:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        .main-top-button {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            height: 90px;
+            background: #d0d0d0;
+            border: none;
+            border-radius: 25px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .main-top-button:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        /* 結果画面 */
+        .result-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 300px;
+        }
+        
+        .result-card {
+            width: 600px;
+            padding: 60px 40px;
+            border-radius: 30px;
+            background: #fcf2e5;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .result-header {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+        }
+        
+        .result-main {
+            font-size: 64px;
+            font-weight: bold;
+            margin: 30px 0;
+            color: #000;
+        }
+        
+        .result-footer {
+            font-size: 26px;
+            line-height: 1.5;
+            color: #000;
+        }
+        
+        .explanation-button {
+            position: absolute;
+            bottom: 460px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            height: 90px;
+            background: #fcf2e5;
+            border: none;
+            border-radius: 25px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .explanation-button:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        /* 解説画面 */
+        .explanation-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .explanation-title {
+            margin-top: 120px;
+            width: 650px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: #fcf2e5;
+            line-height: 1.5;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .explanation-card {
+            margin-top: 80px;
+            width: 600px;
+            padding: 50px;
+            border-radius: 30px;
+            background: #fcf2e5;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        .explanation-correct {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #000;
+            text-align: center;
+        }
+        
+        .explanation-text {
+            font-size: 28px;
+            line-height: 1.7;
+            color: #000;
+            text-align: left;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    
+    <!-- レベル選択画面 -->
+    <div class="level-select-screen" id="levelSelectScreen">
+        <div class="main-title">
+            <h1>名護クイズ<br>マスター検定！！</h1>
+        </div>
+        <div class="level-buttons">
+            <button class="level-button" onclick="startQuiz('beginner1')">初級1</button>
+            <button class="level-button" onclick="startQuiz('beginner2')">初級2</button>
+            <button class="level-button" onclick="startQuiz('intermediate1')">中級1</button>
+            <button class="level-button" onclick="startQuiz('intermediate2')">中級2</button>
+            <button class="level-button" onclick="startQuiz('advanced1')">上級1</button>
+            <button class="level-button" onclick="startQuiz('advanced2')">上級2</button>
+        </div>
+        <button class="top-button" onclick="returnToTop()">TOP画面へ</button>
+    </div>
+    
+    <!-- クイズ画面 -->
+    <div class="quiz-screen" id="quizScreen">
+        <div class="question" id="question"></div>
+        <div class="choices" id="choicesContainer"></div>
+        <button class="quiz-top-button" onclick="returnToQuizTop()">クイズTOPへ</button>
+        <button class="main-top-button" onclick="returnToTop()">TOP画面へ</button>
+    </div>
+    
+    <!-- 結果画面 -->
+    <div class="result-screen" id="resultScreen">
+        <div class="result-card">
+            <div class="result-header" id="resultHeader"></div>
+            <div class="result-main" id="resultMain"></div>
+            <div class="result-footer" id="resultFooter"></div>
+        </div>
+        <button class="explanation-button" id="explanationButton" onclick="showExplanation()">解説</button>
+        <button class="quiz-top-button" onclick="returnToQuizTop()">クイズTOPへ</button>
+        <button class="main-top-button" onclick="returnToTop()">TOP画面へ</button>
+    </div>
+    
+    <!-- 解説画面 -->
+    <div class="explanation-screen" id="explanationScreen">
+        <div class="explanation-title" id="explanationTitle"></div>
+        <div class="explanation-card">
+            <div class="explanation-correct" id="explanationCorrect"></div>
+            <div class="explanation-text" id="explanationText"></div>
+        </div>
+        <button class="quiz-top-button" onclick="returnToQuizTop()">クイズTOPへ</button>
+        <button class="main-top-button" onclick="returnToTop()">TOP画面へ</button>
+    </div>
+    
+    <script>
+        // クイズデータ
+        const quizData = {
+            beginner1: {
+                id: 'beginner1',
+                question: "名護市の特産品といえば？",
+                choices: ["A. 海ぶどう", "B. あぐー（豚）", "C. ハブ酒"],
+                correct: "B",
+                explanation: "アグーは沖縄固有の貴重な在来豚で、名護市は「アグーの里」として宣言しており、アグー普及に力を入れています。"
+            },
+            beginner2: {
+                id: 'beginner2',
+                question: "屋我地島へは沖縄本島から何でアクセスできるでしょう？",
+                choices: ["A. 船", "B. 橋", "C. トンネル"],
+                correct: "B",
+                explanation: "屋我地島は本島北部に属し、橋で沖縄本島と繋がっています。"
+            },
+            intermediate1: {
+                id: 'intermediate1',
+                question: "名護市民会館の入り口にある像は何の動物の像？",
+                choices: ["A. 黒豚(あぐー豚)の像", "B. ヤンバルクイナの像", "C. 猫の像"],
+                correct: "A",
+                explanation: "2013年9月1日に｢アグーの里｣を宣言し、記念像を建立しました。「アグー」とは沖縄固有の貴重な在来豚で、やわらかく、甘みが強い味わいが特徴です。かつて絶滅の危機を迎えた「アグー」を戻し交配により復活させました。"
+            },
+            intermediate2: {
+                id: 'intermediate2',
+                question: "ひんぷんガジュマルの推定樹齢として最も近いのは？",
+                choices: ["A. 約150年", "B. 約300年", "C. 約600年"],
+                correct: "B",
+                explanation: "ひんぷんガジュマルは推定樹齢約300年、高さ19mの国指定天然記念物です。"
+            },
+            advanced1: {
+                id: 'advanced1',
+                question: "名護市庁舎が受賞した建築に関する賞の名前は？",
+                choices: ["A. 日本建築学会賞", "B. 日本芸術院賞", "C. 公共建築賞"],
+                correct: "A",
+                explanation: "名護市庁舎は象設計集団の代表作とも言われる有名建築物で、第33回日本建築学会賞作品しました。沖縄の風土を生かした設計で、省エネ庁舎として知られています。"
+            },
+            advanced2: {
+                id: 'advanced2',
+                question: "「ピトゥ」とは一体なんでしょう？",
+                choices: ["A. 小型のクジラ類", "B. イカ", "C. ウミガメ"],
+                correct: "A",
+                explanation: "名護では小型のクジラ類のことをピトゥと呼んでいます。名護湾では、昔から本種などを対象とする追い込みのピトゥ漁を行っていましたが、平成元年3月以降、こうした漁は禁止となりました。"
+            }
+        };
+        
+        let currentQuiz = null;
+        let answerStats = null;
+        
+        // Google Apps Script Web App URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyCDT3jFuxLWfwgMyV5mJgXfzZjm2P3KMkoxw0Onyd4zvf8mCL-e-mSCWsDdb-w0pWB/exec';
+        
+        // 統計データの初期化
+        function createEmptyStats() {
+            const stats = {};
+            Object.keys(quizData).forEach(key => {
+                stats[key] = { A: 0, B: 0, C: 0};
+            });
+            return stats;
+        }
+        
+        // サーバーから統計を取得
+        async function initStats() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    answerStats = await response.json();
+                    console.log('✅ サーバーから統計を読み込みました');
+                } else {
+                    answerStats = createEmptyStats();
+                    console.log('✅ 新しい統計を作成しました');
+                }
+            } catch (e) {
+                console.log('⚠️ サーバー接続エラー。ローカルモードで動作します:', e);
+                answerStats = createEmptyStats();
+            }
+        }
+        
+        // 回答をサーバーに保存
+        async function saveAnswer(quizId, choice) {
+            try {
+                const url = `${API_URL}?quizId=${encodeURIComponent(quizId)}&choice=${encodeURIComponent(choice)}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors'
+                });
+                console.log('✅ 回答をサーバーに送信しました');
+            } catch (e) {
+                console.error('❌ サーバー接続エラー:', e);
+            }
+        }
+        
+        // 回答を記録
+        async function recordAnswer(quizId, selectedChoice) {
+            if (answerStats[quizId] && answerStats[quizId][selectedChoice] !== undefined) {
+                answerStats[quizId][selectedChoice]++;
+            }
+            await saveAnswer(quizId, selectedChoice);
+            console.log(`📝 回答を記録: ${quizId} - ${selectedChoice}`);
+        }
+        
+        // クイズ開始
+        function startQuiz(level) {
+            currentQuiz = quizData[level];
+            
+            document.getElementById('question').textContent = currentQuiz.question;
+            
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+            
+            currentQuiz.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice';
+                button.textContent = choice;
+                button.onclick = () => selectAnswer(choice.charAt(0));
+                choicesContainer.appendChild(button);
+            });
+            
+            showScreen('quizScreen');
+        }
+        
+        // 回答選択
+        async function selectAnswer(selectedChoice) {
+            const buttons = document.querySelectorAll('.choice');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            await recordAnswer(currentQuiz.id, selectedChoice);
+            
+            const isCorrect = selectedChoice === currentQuiz.correct;
+            showResult(isCorrect);
+        }
+        
+        // 結果表示
+        function showResult(isCorrect) {
+            const resultHeader = document.getElementById('resultHeader');
+            const resultMain = document.getElementById('resultMain');
+            const resultFooter = document.getElementById('resultFooter');
+            
+            if (isCorrect) {
+                resultHeader.textContent = 'お見事！';
+                resultMain.textContent = '正解！';
+                resultFooter.textContent = 'もっと名護を知りたい方は\nこちら';
+            } else {
+                // 正答率を計算
+                const stats = answerStats[currentQuiz.id];
+                const correctCount = stats[currentQuiz.correct] || 0;
+                const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
+                const correctRate = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+                
+                resultHeader.textContent = '残念...';
+                resultMain.textContent = '不正解！';
+                resultFooter.textContent = `正答率は${correctRate}%！`;
+            }
+            
+            showScreen('resultScreen');
+        }
+        
+        // 解説表示
+        function showExplanation() {
+            document.getElementById('explanationTitle').textContent = currentQuiz.question;
+            document.getElementById('explanationCorrect').textContent = `正解：${currentQuiz.correct}`;
+            document.getElementById('explanationText').textContent = currentQuiz.explanation;
+            
+            showScreen('explanationScreen');
+        }
+        
+        // クイズTOPへ戻る
+        function returnToQuizTop() {
+            showScreen('levelSelectScreen');
+        }
+        
+        // TOP画面へ戻る（実際の実装では別ページへ遷移）
+        function returnToTop() {
+            // 実際の実装では別のTOP画面へ遷移
+            // window.location.href = 'index.html';
+            showScreen('levelSelectScreen');
+        }
+        
+        // 画面切り替え
+        function showScreen(screenId) {
+            const screens = ['levelSelectScreen', 'quizScreen', 'resultScreen', 'explanationScreen'];
+            screens.forEach(id => {
+                const element = document.getElementById(id);
+                if (id === screenId) {
+                    element.style.display = 'flex';
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+        }
+        
+        // 統計表示
+        async function showStats() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    answerStats = await response.json();
+                }
+                
+                console.clear();
+                console.log('='.repeat(60));
+                console.log('📊 クイズ回答統計(全ブラウザ・全デバイス共有)');
+                console.log('='.repeat(60));
+                
+                Object.entries(quizData).forEach(([key, quiz]) => {
+                    const stats = answerStats[key];
+                    const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
+                    
+                    console.log(`\n【${key}】${quiz.question}`);
+                    console.log(`正解: ${quiz.correct}`);
+                    console.log('-'.repeat(50));
+                    Object.entries(stats).forEach(([choice, count]) => {
+                        if (quiz.choices.some(c => c.startsWith(choice))) {
+                            const percentage = total > 0 ? Math.round(count / total * 100) : 0;
+                            console.log(`${choice}: ${count}人 (${percentage}%)`);
+                        }
+                    });
+                    console.log(`合計: ${total}人`);
+                });
+                
+                console.log('\n' + '='.repeat(60));
+            } catch (e) {
+                console.error('❌ 統計の取得に失敗しました:', e);
+            }
+        }
+        
+        window.showStats = showStats;
+        
+        // 初期化
+        window.addEventListener('load', () => {
+            answerStats = createEmptyStats();
+            initStats();
+            
+            console.log('📝 名護クイズマスター検定が読み込まれました');
+            console.log('💡 統計を見るには、コンソールで showStats() を実行してください');
+        });
+    </script>
+</body>
+</html>
