@@ -56,6 +56,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 28px 60px;
             padding: 0 100px;
+            margin-top: 80px;
         }
         
         .level-button {
@@ -92,6 +93,7 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: transform 0.2s;
+            margin-top: 80px;
         }
         
         .top-button:hover {
@@ -211,7 +213,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 50px;
             box-sizing: border-box;
             padding: 40px 0;
         }
@@ -257,6 +258,7 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: transform 0.2s;
+            margin-top: 80px;
         }
         
         .explanation-button:hover {
@@ -277,6 +279,7 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: transform 0.2s;
+            margin-top: 80px;
         }
         
         .result-main-top-button:hover {
@@ -560,9 +563,8 @@
             showScreen('levelSelectScreen');
         }
         
-        // TOP画面へ戻る（実際の実装では別ページへ遷移）
+        // TOP画面へ戻る
         function returnToTop() {
-            // 実際の実装では別のTOP画面へ遷移
             // window.location.href = 'index.html';
             showScreen('levelSelectScreen');
         }
