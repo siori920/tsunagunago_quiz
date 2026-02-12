@@ -33,10 +33,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-evenly;
+            padding: 30px 0 30px;
+            box-sizing: border-box;
         }
         
         .main-title {
-            margin-top: 40px;
             text-align: center;
             color: #fcf2e5;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
@@ -52,8 +54,7 @@
         .level-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px 40px;
-            margin-top: 35px;
+            gap: 28px 60px;
             padding: 0 100px;
         }
         
@@ -80,10 +81,6 @@
         }
         
         .top-button {
-            position: absolute;
-            bottom: 55px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 420px;
             height: 72px;
             background: #d0d0d0;
@@ -98,7 +95,7 @@
         }
         
         .top-button:hover {
-            transform: translateX(-50%) translateY(-2px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
         
@@ -213,8 +210,10 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding-top: 120px;
+            justify-content: center;
+            gap: 28px;
+            box-sizing: border-box;
+            padding: 40px 0;
         }
         
         .result-card {
@@ -247,10 +246,6 @@
         }
         
         .explanation-button {
-            position: absolute;
-            bottom: 235px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 400px;
             height: 68px;
             background: #fcf2e5;
@@ -265,7 +260,27 @@
         }
         
         .explanation-button:hover {
-            transform: translateX(-50%) translateY(-2px);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        /* 結果画面専用のTOP画面へボタン（通常フロー） */
+        .result-main-top-button {
+            width: 400px;
+            height: 68px;
+            background: #d0d0d0;
+            border: none;
+            border-radius: 20px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .result-main-top-button:hover {
+            transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
         
@@ -320,13 +335,11 @@
             display: none !important;
         }
         
-        /* 結果画面とクイズ画面のボタン位置を共通化 */
-        .result-screen .quiz-top-button,
+        /* クイズ画面のボタン位置 */
         .quiz-screen .quiz-top-button {
             bottom: 145px;
         }
         
-        .result-screen .main-top-button,
         .quiz-screen .main-top-button {
             bottom: 60px;
         }
@@ -367,8 +380,7 @@
             <div class="result-footer" id="resultFooter"></div>
         </div>
         <button class="explanation-button" id="explanationButton" onclick="showExplanation()">解説</button>
-        <button class="quiz-top-button" onclick="returnToQuizTop()">クイズTOPへ</button>
-        <button class="main-top-button" onclick="returnToTop()">TOP画面へ</button>
+        <button class="result-main-top-button" onclick="returnToTop()">TOP画面へ</button>
     </div>
     
     <!-- 解説画面 -->
