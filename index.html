@@ -54,7 +54,7 @@
         .level-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 28px 60px;
+            gap: 108px 60px; /* ①縦方向のgapを28px→108px(+80px)に変更 */
             padding: 0 100px;
             margin-top: 80px;
         }
@@ -346,6 +346,11 @@
         .quiz-screen .main-top-button {
             bottom: 60px;
         }
+
+        /* ③解説画面専用：クイズTOPへボタンを100px上に */
+        .explanation-screen .quiz-top-button {
+            bottom: 245px;
+        }
     </style>
 </head>
 <body>
@@ -405,6 +410,7 @@
                 question: "名護市の特産品といえば？",
                 choices: ["A. 海ぶどう", "B. あぐー（豚）", "C. ハブ酒"],
                 correct: "B",
+                correctRate: 62, // ②問題ごとの正答率
                 explanation: "アグーは沖縄固有の貴重な在来豚で、名護市は「アグーの里」として宣言しており、アグー普及に力を入れています。"
             },
             beginner2: {
@@ -412,6 +418,7 @@
                 question: "屋我地島へは沖縄本島から何でアクセスできるでしょう？",
                 choices: ["A. 船", "B. 橋", "C. トンネル"],
                 correct: "B",
+                correctRate: 53, // ②問題ごとの正答率
                 explanation: "屋我地島は本島北部に属し、橋で沖縄本島と繋がっています。"
             },
             intermediate1: {
@@ -419,6 +426,7 @@
                 question: "名護市民会館の入り口にある像は何の動物の像？",
                 choices: ["A. 黒豚(あぐー豚)の像", "B. ヤンバルクイナの像", "C. 猫の像"],
                 correct: "A",
+                correctRate: 57, // ②問題ごとの正答率
                 explanation: "2013年9月1日に｢アグーの里｣を宣言し、記念像を建立しました。「アグー」とは沖縄固有の貴重な在来豚で、やわらかく、甘みが強い味わいが特徴です。かつて絶滅の危機を迎えた「アグー」を戻し交配により復活させました。"
             },
             intermediate2: {
@@ -426,6 +434,7 @@
                 question: "ひんぷんガジュマルの推定樹齢として最も近いのは？",
                 choices: ["A. 約150年", "B. 約300年", "C. 約600年"],
                 correct: "B",
+                correctRate: 43, // ②問題ごとの正答率
                 explanation: "ひんぷんガジュマルは推定樹齢約300年、高さ19mの国指定天然記念物です。"
             },
             advanced1: {
@@ -433,6 +442,7 @@
                 question: "名護市庁舎が受賞した建築に関する賞の名前は？",
                 choices: ["A. 日本建築学会賞", "B. 日本芸術院賞", "C. 公共建築賞"],
                 correct: "A",
+                correctRate: 51, // ②問題ごとの正答率
                 explanation: "名護市庁舎は象設計集団の代表作とも言われる有名建築物で、第33回日本建築学会賞作品しました。沖縄の風土を生かした設計で、省エネ庁舎として知られています。"
             },
             advanced2: {
@@ -440,6 +450,7 @@
                 question: "「ピトゥ」とは一体なんでしょう？",
                 choices: ["A. 小型のクジラ類", "B. イカ", "C. ウミガメ"],
                 correct: "A",
+                correctRate: 39, // ②問題ごとの正答率
                 explanation: "名護では小型のクジラ類のことをピトゥと呼んでいます。名護湾では、昔から本種などを対象とする追い込みのピトゥ漁を行っていましたが、平成元年3月以降、こうした漁は禁止となりました。"
             }
         };
@@ -536,14 +547,17 @@
             const resultMain = document.getElementById('resultMain');
             const resultFooter = document.getElementById('resultFooter');
             
+            // ②各問題の正答率を表示
+            const rate = currentQuiz.correctRate;
+            
             if (isCorrect) {
                 resultHeader.textContent = 'お見事！';
                 resultMain.textContent = '正解！';
-                resultFooter.textContent = '正答率は明日公開！';
+                resultFooter.textContent = `正答率は${rate}%でした！`;
             } else {
                 resultHeader.textContent = '残念...';
                 resultMain.textContent = '不正解！';
-                resultFooter.textContent = '正答率は明日公開！';
+                resultFooter.textContent = `正答率は${rate}%でした！`;
             }
             
             showScreen('resultScreen');
