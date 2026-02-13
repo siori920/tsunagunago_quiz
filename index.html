@@ -54,7 +54,7 @@
         .level-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 58px 60px; /* ①縦方向のgapを28px→58px(+30px)に変更 */
+            gap: 45px 60px;
             padding: 0 100px;
             margin-top: 80px;
         }
@@ -410,7 +410,7 @@
                 question: "名護市の特産品といえば？",
                 choices: ["A. 海ぶどう", "B. あぐー（豚）", "C. ハブ酒"],
                 correct: "B",
-                correctRate: 62, // ②問題ごとの正答率
+                correctRate: 62,
                 explanation: "アグーは沖縄固有の貴重な在来豚で、名護市は「アグーの里」として宣言しており、アグー普及に力を入れています。"
             },
             beginner2: {
@@ -418,7 +418,7 @@
                 question: "屋我地島へは沖縄本島から何でアクセスできるでしょう？",
                 choices: ["A. 船", "B. 橋", "C. トンネル"],
                 correct: "B",
-                correctRate: 53, // ②問題ごとの正答率
+                correctRate: 53,
                 explanation: "屋我地島は本島北部に属し、橋で沖縄本島と繋がっています。"
             },
             intermediate1: {
@@ -426,7 +426,7 @@
                 question: "名護市民会館の入り口にある像は何の動物の像？",
                 choices: ["A. 黒豚(あぐー豚)の像", "B. ヤンバルクイナの像", "C. 猫の像"],
                 correct: "A",
-                correctRate: 57, // ②問題ごとの正答率
+                correctRate: 57,
                 explanation: "2013年9月1日に｢アグーの里｣を宣言し、記念像を建立しました。「アグー」とは沖縄固有の貴重な在来豚で、やわらかく、甘みが強い味わいが特徴です。かつて絶滅の危機を迎えた「アグー」を戻し交配により復活させました。"
             },
             intermediate2: {
@@ -434,7 +434,7 @@
                 question: "ひんぷんガジュマルの推定樹齢として最も近いのは？",
                 choices: ["A. 約150年", "B. 約300年", "C. 約600年"],
                 correct: "B",
-                correctRate: 43, // ②問題ごとの正答率
+                correctRate: 43,
                 explanation: "ひんぷんガジュマルは推定樹齢約300年、高さ19mの国指定天然記念物です。"
             },
             advanced1: {
@@ -442,7 +442,7 @@
                 question: "名護市庁舎が受賞した建築に関する賞の名前は？",
                 choices: ["A. 日本建築学会賞", "B. 日本芸術院賞", "C. 公共建築賞"],
                 correct: "A",
-                correctRate: 51, // ②問題ごとの正答率
+                correctRate: 51,
                 explanation: "名護市庁舎は象設計集団の代表作とも言われる有名建築物で、第33回日本建築学会賞作品しました。沖縄の風土を生かした設計で、省エネ庁舎として知られています。"
             },
             advanced2: {
@@ -450,7 +450,7 @@
                 question: "「ピトゥ」とは一体なんでしょう？",
                 choices: ["A. 小型のクジラ類", "B. イカ", "C. ウミガメ"],
                 correct: "A",
-                correctRate: 39, // ②問題ごとの正答率
+                correctRate: 39,
                 explanation: "名護では小型のクジラ類のことをピトゥと呼んでいます。名護湾では、昔から本種などを対象とする追い込みのピトゥ漁を行っていましたが、平成元年3月以降、こうした漁は禁止となりました。"
             }
         };
@@ -458,10 +458,8 @@
         let currentQuiz = null;
         let answerStats = null;
         
-        // Google Apps Script Web App URL
         const API_URL = 'https://script.google.com/macros/s/AKfycbyCDT3jFuxLWfwgMyV5mJgXfzZjm2P3KMkoxw0Onyd4zvf8mCL-e-mSCWsDdb-w0pWB/exec';
         
-        // 統計データの初期化
         function createEmptyStats() {
             const stats = {};
             Object.keys(quizData).forEach(key => {
@@ -470,7 +468,6 @@
             return stats;
         }
         
-        // サーバーから統計を取得
         async function initStats() {
             try {
                 const response = await fetch(API_URL);
@@ -487,7 +484,6 @@
             }
         }
         
-        // 回答をサーバーに保存
         async function saveAnswer(quizId, choice) {
             try {
                 const url = `${API_URL}?quizId=${encodeURIComponent(quizId)}&choice=${encodeURIComponent(choice)}`;
@@ -501,7 +497,6 @@
             }
         }
         
-        // 回答を記録
         async function recordAnswer(quizId, selectedChoice) {
             if (answerStats[quizId] && answerStats[quizId][selectedChoice] !== undefined) {
                 answerStats[quizId][selectedChoice]++;
@@ -510,15 +505,11 @@
             console.log(`📝 回答を記録: ${quizId} - ${selectedChoice}`);
         }
         
-        // クイズ開始
         function startQuiz(level) {
             currentQuiz = quizData[level];
-            
             document.getElementById('question').textContent = currentQuiz.question;
-            
             const choicesContainer = document.getElementById('choicesContainer');
             choicesContainer.innerHTML = '';
-            
             currentQuiz.choices.forEach((choice, index) => {
                 const button = document.createElement('button');
                 button.className = 'choice';
@@ -526,30 +517,22 @@
                 button.onclick = () => selectAnswer(choice.charAt(0));
                 choicesContainer.appendChild(button);
             });
-            
             showScreen('quizScreen');
         }
         
-        // 回答選択
         async function selectAnswer(selectedChoice) {
             const buttons = document.querySelectorAll('.choice');
             buttons.forEach(btn => btn.disabled = true);
-            
             await recordAnswer(currentQuiz.id, selectedChoice);
-            
             const isCorrect = selectedChoice === currentQuiz.correct;
             showResult(isCorrect);
         }
         
-        // 結果表示
         function showResult(isCorrect) {
             const resultHeader = document.getElementById('resultHeader');
             const resultMain = document.getElementById('resultMain');
             const resultFooter = document.getElementById('resultFooter');
-            
-            // ②各問題の正答率を表示
             const rate = currentQuiz.correctRate;
-            
             if (isCorrect) {
                 resultHeader.textContent = 'お見事！';
                 resultMain.textContent = '正解！';
@@ -559,31 +542,24 @@
                 resultMain.textContent = '不正解！';
                 resultFooter.textContent = `正答率は${rate}%でした！`;
             }
-            
             showScreen('resultScreen');
         }
         
-        // 解説表示
         function showExplanation() {
             document.getElementById('explanationTitle').textContent = currentQuiz.question;
             document.getElementById('explanationCorrect').textContent = `正解：${currentQuiz.correct}`;
             document.getElementById('explanationText').textContent = currentQuiz.explanation;
-            
             showScreen('explanationScreen');
         }
         
-        // クイズTOPへ戻る
         function returnToQuizTop() {
             showScreen('levelSelectScreen');
         }
         
-        // TOP画面へ戻る（実際の実装では別ページへ遷移）
         function returnToTop() {
-            // window.location.href = 'index.html';
             showScreen('levelSelectScreen');
         }
         
-        // 画面切り替え
         function showScreen(screenId) {
             const screens = ['levelSelectScreen', 'quizScreen', 'resultScreen', 'explanationScreen'];
             screens.forEach(id => {
@@ -596,23 +572,19 @@
             });
         }
         
-        // 統計表示
         async function showStats() {
             try {
                 const response = await fetch(API_URL);
                 if (response.ok) {
                     answerStats = await response.json();
                 }
-                
                 console.clear();
                 console.log('='.repeat(60));
                 console.log('📊 クイズ回答統計(全ブラウザ・全デバイス共有)');
                 console.log('='.repeat(60));
-                
                 Object.entries(quizData).forEach(([key, quiz]) => {
                     const stats = answerStats[key];
                     const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
-                    
                     console.log(`\n【${key}】${quiz.question}`);
                     console.log(`正解: ${quiz.correct}`);
                     console.log('-'.repeat(50));
@@ -624,7 +596,6 @@
                     });
                     console.log(`合計: ${total}人`);
                 });
-                
                 console.log('\n' + '='.repeat(60));
             } catch (e) {
                 console.error('❌ 統計の取得に失敗しました:', e);
@@ -633,11 +604,9 @@
         
         window.showStats = showStats;
         
-        // 初期化
         window.addEventListener('load', () => {
             answerStats = createEmptyStats();
             initStats();
-            
             console.log('📝 名護クイズマスター検定が読み込まれました');
             console.log('💡 統計を見るには、コンソールで showStats() を実行してください');
         });
